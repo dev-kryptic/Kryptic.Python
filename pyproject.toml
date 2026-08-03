@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "krypticdev"
+version = "0.1.0"
+description = "Kryptic Python SDK - passively injects development secrets from the Kryptic daemon into os.environ. No-op outside development."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+authors = [{ name = "Kryptic" }]
+urls = { Homepage = "https://kryptic.dev" }
+
+[tool.setuptools]
+packages = ["krypticdev"]
