@@ -1,8 +1,8 @@
-"""Kryptic Python SDK.
+"""Kryptic daemon client for Python.
 
-During development startup, ``krypticdev.inject()`` asks the local Kryptic daemon for
+During development startup, ``kryptic.inject()`` asks the local Kryptic daemon for
 the current project's secrets and puts them into ``os.environ``. Outside development it
-is a no-op. It never raises — a missing daemon means the application simply starts with
+is a no-op. It never raises - a missing daemon means the application simply starts with
 whatever environment it already has.
 
 Protocol: daemon/PROTOCOL.md v1 (newline-delimited JSON over a local socket).
@@ -49,7 +49,7 @@ def inject(
 
     project_id = project_id or os.environ.get("KRYPTIC_PROJECT_ID") or (config or {}).get("projectId")
     if not project_id:
-        _warn("no kryptic.json found (and no KRYPTIC_PROJECT_ID set) — nothing to inject.")
+        _warn("no kryptic.json found (and no KRYPTIC_PROJECT_ID set) - nothing to inject.")
         return InjectResult(injected=0, skipped=True, reason="no_project")
 
     environment = (
@@ -67,10 +67,10 @@ def inject(
             timeout,
         )
     except OSError as e:
-        _warn(f"daemon not reachable ({e}) — continuing without injected secrets.")
+        _warn(f"daemon not reachable ({e}) - continuing without injected secrets.")
         return InjectResult(injected=0, skipped=True, reason="daemon_unreachable")
     except ValueError:
-        _warn("daemon sent an invalid response — continuing without injected secrets.")
+        _warn("daemon sent an invalid response - continuing without injected secrets.")
         return InjectResult(injected=0, skipped=True, reason="invalid_response")
 
     if not response.get("ok"):
@@ -151,7 +151,7 @@ def _round_trip_unix_socket(line: bytes, timeout: float) -> bytes:
 def _round_trip_named_pipe(line: bytes, timeout: float) -> bytes:
     """Round trip over a Windows named pipe.
 
-    The daemon serves a byte-mode pipe, so a plain file handle works — no win32
+    The daemon serves a byte-mode pipe, so a plain file handle works - no win32
     bindings needed. Mirrors the .NET client: the timeout covers connecting (the
     pipe may briefly report "busy" between served clients); the read then blocks
     until the daemon replies, which it does immediately or not at all.
@@ -159,7 +159,7 @@ def _round_trip_named_pipe(line: bytes, timeout: float) -> bytes:
     deadline = time.monotonic() + timeout
     while True:
         try:
-            pipe = open(_socket_path(), "r+b", buffering=0)  # noqa: SIM115 — closed below
+            pipe = open(_socket_path(), "r+b", buffering=0)  # noqa: SIM115 - closed below
             break
         except OSError:
             if time.monotonic() >= deadline:
@@ -189,7 +189,7 @@ def _find_kryptic_json() -> Optional[dict]:
             try:
                 return json.loads(candidate.read_text(encoding="utf-8"))
             except ValueError:
-                _warn(f"could not parse {candidate} — ignoring it.")
+                _warn(f"could not parse {candidate} - ignoring it.")
                 return None
         if directory.parent == directory:
             return None

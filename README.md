@@ -1,17 +1,17 @@
-# krypticdev
+# kryptic-daemon
 
-The Kryptic Python SDK. During development startup it asks the local Kryptic daemon for
-the current project's secrets and puts them into `os.environ`. Outside development it is
-a no-op. It never raises — no daemon just means your app starts with the environment it
-already has.
+The Kryptic daemon client for Python. During development startup it asks the local
+Kryptic daemon for the current project's secrets and puts them into `os.environ`.
+Outside development it is a no-op. It never raises - no daemon just means your app
+starts with the environment it already has.
 
 ```bash
-pip install krypticdev
+pip install kryptic-daemon
 ```
 
 ```python
-import krypticdev
-krypticdev.inject()  # call before any os.environ reads
+import kryptic
+kryptic.inject()  # call before any os.environ reads
 
 import os
 db_url = os.environ["DATABASE_URL"]  # now populated
@@ -20,8 +20,8 @@ db_url = os.environ["DATABASE_URL"]  # now populated
 Django (`manage.py`, before `django.setup()`):
 
 ```python
-import krypticdev
-krypticdev.inject()
+import kryptic
+kryptic.inject()
 ```
 
 Works with Django, FastAPI, Flask, and anything else that reads `os.environ`.

@@ -8,7 +8,7 @@ import threading
 import unittest
 from pathlib import Path
 
-import krypticdev
+import kryptic
 
 
 class MockDaemon:
@@ -73,7 +73,7 @@ class InjectTests(unittest.TestCase):
             return {"v": 1, "ok": True, "secrets": [{"key": "INJECTED_KEY", "value": "from-daemon"}]}
 
         self.start_daemon(handler)
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertFalse(result.skipped)
         self.assertEqual(result.injected, 1)
@@ -85,7 +85,7 @@ class InjectTests(unittest.TestCase):
         os.environ["EXISTING_KEY"] = "real-env-wins"
         self.start_daemon(lambda r: {"v": 1, "ok": True, "secrets": [{"key": "EXISTING_KEY", "value": "x"}]})
 
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertEqual(result.injected, 0)
         self.assertEqual(os.environ["EXISTING_KEY"], "real-env-wins")
@@ -93,7 +93,7 @@ class InjectTests(unittest.TestCase):
     def test_noop_when_daemon_missing(self):
         os.environ["KRYPTIC_SOCKET_PATH"] = str(Path(self.temp_dir) / "missing.sock")
 
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertTrue(result.skipped)
         self.assertEqual(result.reason, "daemon_unreachable")
@@ -101,7 +101,7 @@ class InjectTests(unittest.TestCase):
     def test_noop_in_production(self):
         os.environ["ENVIRONMENT"] = "production"
 
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertTrue(result.skipped)
         self.assertEqual(result.reason, "environment_production")
@@ -109,7 +109,7 @@ class InjectTests(unittest.TestCase):
     def test_noop_when_disabled(self):
         os.environ["KRYPTIC_DISABLED"] = "true"
 
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertTrue(result.skipped)
         self.assertEqual(result.reason, "disabled")
@@ -117,7 +117,7 @@ class InjectTests(unittest.TestCase):
     def test_handles_error_responses(self):
         self.start_daemon(lambda r: {"v": 1, "ok": False, "error": "access_denied"})
 
-        result = krypticdev.inject()
+        result = kryptic.inject()
 
         self.assertTrue(result.skipped)
         self.assertEqual(result.reason, "access_denied")
@@ -132,7 +132,7 @@ class InjectTests(unittest.TestCase):
             return {"v": 1, "ok": True, "secrets": []}
 
         self.start_daemon(handler)
-        krypticdev.inject()
+        kryptic.inject()
 
         self.assertEqual(seen["projectId"], "proj_override0001")
         self.assertEqual(seen["environment"], "staging")
