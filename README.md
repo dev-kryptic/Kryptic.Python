@@ -1,4 +1,4 @@
-# kryptic-daemon
+# kryptic-daemon-client
 
 The Kryptic daemon client for Python. During development startup it asks the local
 Kryptic daemon for the current project's secrets and puts them into `os.environ`.
@@ -6,7 +6,7 @@ Outside development it is a no-op. It never raises - no daemon just means your a
 starts with the environment it already has.
 
 ```bash
-pip install kryptic-daemon
+pip install kryptic-daemon-client
 ```
 
 ```python

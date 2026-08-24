@@ -3,14 +3,14 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kryptic-daemon"
+name = "kryptic-daemon-client"
 version = "0.1.0"
 description = "Kryptic daemon client for Python. Passively injects development secrets from the local Kryptic daemon into os.environ. No-op outside development."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.9"
 authors = [{ name = "Kryptic" }]
-urls = { Homepage = "https://kryptic.dev" }
+urls = { Homepage = "https://kryptic.dev", Repository = "https://github.com/dev-kryptic/Kryptic.Python" }
 
 [tool.setuptools]
 packages = ["kryptic"]
