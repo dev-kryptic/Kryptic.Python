@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kryptic-daemon-client"
-version = "1.0.0"
+version = "1.0.1"
 description = "Kryptic daemon client for Python. Passively injects development secrets from the local Kryptic daemon into os.environ. No-op outside development."
 readme = "README.md"
 license = { text = "Apache-2.0" }
