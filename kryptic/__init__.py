@@ -118,7 +118,12 @@ def _socket_path() -> str:
         if runtime_dir:
             return str(Path(runtime_dir) / "kryptic-daemon.sock")
 
-    return "/tmp/kryptic-daemon.sock"
+    # Same per-user directory the daemon listens on (PROTOCOL.md). Never /tmp.
+    if sys.platform == "darwin":
+        return str(Path.home() / "Library" / "Application Support" / "kryptic" / "kryptic-daemon.sock")
+
+    config_home = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
+    return str(Path(config_home) / "kryptic" / "kryptic-daemon.sock")
 
 
 def _request(payload: dict, timeout: float) -> dict:
